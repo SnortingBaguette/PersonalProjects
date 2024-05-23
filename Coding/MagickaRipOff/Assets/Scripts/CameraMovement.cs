@@ -35,6 +35,6 @@ public class CameraMovement : MonoBehaviour
         copiedPositionZ = playerObject.transform.position.z;    //Copy the position of the player in order to reference it
         positionForTheCamera.Set(copiedPositionX + cursorCoordinates.x, 9.45f, copiedPositionZ - 6.25f + cursorCoordinates.y);  //Math for making the camera follow the player only on x and z axis
         transform.position = positionForTheCamera;  //Setting the math result as the camera position
-        Debug.Log(cursorCoordinates.y);
+        Debug.Log(cursorCoordinates.x);
     }
 }
