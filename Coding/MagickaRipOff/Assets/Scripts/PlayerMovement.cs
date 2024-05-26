@@ -5,32 +5,43 @@ using UnityEngine.EventSystems;
 
 public class PlayerMovement : MonoBehaviour
 {
-
-    Rigidbody rb;
-    float horizontalInput;
-    float verticalInput;
+    private CharacterController characterController;
+    public float characterSpeed = 5f;
     Vector3 moveDirection;
+
+
+    public Transform lookAtTarget;
+    private Vector3 lookDirection;
+    private Quaternion rotation;
+    public float rotationSpeed = 12f;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        characterController = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
+        lookDirection.x = lookAtTarget.position.x - transform.position.x;
+        lookDirection.z = lookAtTarget.position.z - transform.position.z;
+        rotation = Quaternion.LookRotation(lookDirection);
+        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
+        moveDirection = Vector3.Normalize(lookDirection);
+        //Vector3.Normalize(lookDirection);
+
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+            characterController.Move(moveDirection * characterSpeed * Time.deltaTime);
+        }
     }
+
+
 
     private void FixedUpdate()
     {
-        
-        moveDirection.x = horizontalInput * 1000;
-        moveDirection.z = verticalInput * 1000;
 
-
-        rb.AddForce(moveDirection);
     }
 }

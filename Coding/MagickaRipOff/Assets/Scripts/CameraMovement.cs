@@ -33,8 +33,7 @@ public class CameraMovement : MonoBehaviour
         cursorCoordinates.y = (Input.mousePosition.y - screenHeight) / screenHeight;  //Clamp the cursor coordinates to 1
         copiedPositionX = playerObject.transform.position.x;    //Copy the position of the player in order to reference it
         copiedPositionZ = playerObject.transform.position.z;    //Copy the position of the player in order to reference it
-        positionForTheCamera.Set(copiedPositionX + cursorCoordinates.x, 9.45f, copiedPositionZ - 6.25f + cursorCoordinates.y);  //Math for making the camera follow the player only on x and z axis
+        positionForTheCamera.Set(copiedPositionX + cursorCoordinates.x, 12f, copiedPositionZ - 8f + cursorCoordinates.y);  //Math for making the camera follow the player only on x and z axis
         transform.position = positionForTheCamera;  //Setting the math result as the camera position
-        Debug.Log(cursorCoordinates.x);
     }
 }
