@@ -727,11 +727,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 627d2869fbc0320479cd57d89f394480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterSpeed: 5
+  characterSpeed: 4.25
   lookAtTarget: {fileID: 1097604763}
   rotationSpeed: 12
   feetObject: {fileID: 415571029}
-  movementTarget: {fileID: 831559033}
+  movementTarget: {fileID: 831559037}
 --- !u!143 &964672401
 CharacterController:
   m_ObjectHideFlags: 0

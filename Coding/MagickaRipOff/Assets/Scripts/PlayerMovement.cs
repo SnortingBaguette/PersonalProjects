@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class PlayerMovement : MonoBehaviour
 {
     private CharacterController characterController;
-    public float characterSpeed = 5f;
+    public float characterSpeed = 4.25f;
     Vector3 moveDirection;
 
 
@@ -16,11 +16,15 @@ public class PlayerMovement : MonoBehaviour
     private Quaternion rotation;
     public float rotationSpeed = 12f;
 
-    public Transform feetObject;
+    public Transform feetObject;        //Attach an Empty object that will represent player's feet
     private Vector3 feetPos;
 
-    public GameObject movementTarget;
+    public Transform movementTarget;   //Reference the position to where the player needs to move
     private Vector3 movementTargetPos;
+
+    private bool isCastingBeamSpell;
+    private bool isMoving;
+    private bool isStoppableByCastingABeamSpell;
 
 
     // Start is called before the first frame update
@@ -33,40 +37,61 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        CheckPlayerCastingState();
+        UpdatePlayerRotation();
+        UpdatePlayerMovement();
+        Debug.Log(isCastingBeamSpell);
+    }
 
+
+    private void UpdatePlayerRotation()
+    {
         lookDirection = lookAtTarget.position - transform.position;     //Get the direction from player to the mouse position
         lookDirection.y = 0;        //Reset the vertical aim
         rotation = Quaternion.LookRotation(lookDirection);
         transform.rotation = Quaternion.Lerp(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
+    }
 
-        //moveDirection = Vector3.Lerp(transform.position, lookDirection, 0.1f);
-        //moveDirection = Vector3.Normalize(lookDirection);
+    private void UpdatePlayerMovement()
+    {
         movementTargetPos = movementTarget.transform.position;
         moveDirection = movementTargetPos - transform.position;
         moveDirection.y = 0;
-
         feetPos = feetObject.position;
 
-        
         moveDirection = Vector3.Normalize(moveDirection);
-        //moveDirection = Vector3.Lerp(currentPlayerPosition, movementTarget.transform.position, 0.5f * Time.deltaTime);
-        if (Vector3.Distance(feetPos, movementTargetPos) >= .081f)
+
+        if (Vector3.Distance(feetPos, movementTargetPos) >= .081f && !isStoppableByCastingABeamSpell)
         {
             characterController.Move(moveDirection * characterSpeed * Time.deltaTime);
-        } 
-
-        Debug.Log(Vector3.Distance(feetPos, movementTargetPos));
-
-        /*if (Input.GetKey(KeyCode.Mouse0))
+            isMoving = true;
+        }
+        else
         {
-            characterController.Move(moveDirection * characterSpeed * Time.deltaTime);
-        }*/
+            isMoving = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            isStoppableByCastingABeamSpell = false;
+        }
     }
 
-
-
-    private void FixedUpdate()
+    private void CheckPlayerCastingState()
     {
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            isStoppableByCastingABeamSpell = true;
+            isCastingBeamSpell = true;
+            characterSpeed = 2f;
+            rotationSpeed = .7f;
+        }
 
+        if (Input.GetKeyUp(KeyCode.Mouse1))
+        {
+            isCastingBeamSpell = false;
+            characterSpeed = 4.25f;
+            rotationSpeed = 12f;
+        }
     }
 }
