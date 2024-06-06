@@ -11,61 +11,56 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-    public Transform lookAtTarget;
-    private Vector3 lookDirection;
+    public Transform lookAtTarget;      //Setting a target to look at in the inspector
+    private Vector3 lookDirection;      //A variable to store the position of the target
     private Quaternion rotation;
     public float rotationSpeed = 12f;
 
-    public GameObject moveAfterMouseLetGo;
-    private Vector3 movementFinalTarget;
-    bool shouldStop;
-    private Vector3 directionToSavesPos;
+    public Transform feetObject;
+    private Vector3 feetPos;
+
+    public GameObject movementTarget;
+    private Vector3 movementTargetPos;
 
 
     // Start is called before the first frame update
     void Start()
     {
         characterController = GetComponent<CharacterController>();
-        movementFinalTarget  = moveAfterMouseLetGo.transform.position;
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        lookDirection.x = lookAtTarget.position.x - transform.position.x;
-        lookDirection.z = lookAtTarget.position.z - transform.position.z;
+
+        lookDirection = lookAtTarget.position - transform.position;     //Get the direction from player to the mouse position
+        lookDirection.y = 0;        //Reset the vertical aim
         rotation = Quaternion.LookRotation(lookDirection);
         transform.rotation = Quaternion.Lerp(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
 
+        //moveDirection = Vector3.Lerp(transform.position, lookDirection, 0.1f);
+        //moveDirection = Vector3.Normalize(lookDirection);
+        movementTargetPos = movementTarget.transform.position;
+        moveDirection = movementTargetPos - transform.position;
+        moveDirection.y = 0;
 
-        /*movementFinalTarget = moveAfterMouseLetGo.transform.position;
-        directionToSavesPos.x = movementFinalTarget.x - transform.position.x;
-        directionToSavesPos.z = movementFinalTarget.z - transform.position.x;
-        moveDirection = Vector3.Normalize(directionToSavesPos); */
+        feetPos = feetObject.position;
 
-        moveDirection = Vector3.Normalize(lookDirection);
-
-
-        //Vector3.Normalize(lookDirection);
-
-        /*if (Vector3.Distance(movementFinalTarget, transform.position) <= 1)
-        {
-            Debug.Log("The character will stop now");
-            shouldStop = true;
-
-        } else
-        {
-            Debug.Log("No stopping");
-            shouldStop = false;
-        }   */
-
-        if (Input.GetKey(KeyCode.Mouse0))
+        
+        moveDirection = Vector3.Normalize(moveDirection);
+        //moveDirection = Vector3.Lerp(currentPlayerPosition, movementTarget.transform.position, 0.5f * Time.deltaTime);
+        if (Vector3.Distance(feetPos, movementTargetPos) >= .081f)
         {
             characterController.Move(moveDirection * characterSpeed * Time.deltaTime);
-        }
+        } 
 
-        //Debug.Log(movementFinalTarget);
-        //Debug.Log(Vector3.Distance(movementFinalTarget, transform.position));
+        Debug.Log(Vector3.Distance(feetPos, movementTargetPos));
+
+        /*if (Input.GetKey(KeyCode.Mouse0))
+        {
+            characterController.Move(moveDirection * characterSpeed * Time.deltaTime);
+        }*/
     }
 
 
