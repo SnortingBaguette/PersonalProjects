@@ -6,7 +6,9 @@ public class BeamSizeAdjustment : MonoBehaviour
 {
 
     public GameObject playerObject;
-    bool isCastingBeamSpell;
+    PlayerMovement isCastingBeamSpellCheck;
+    bool isCastingBeam;
+
     bool isCastingBeamSpellObj;
     private Vector3 localScaleOfTheBeam = new Vector3(1 ,1 ,1);
     
@@ -15,13 +17,14 @@ public class BeamSizeAdjustment : MonoBehaviour
     void Start()
     {
         isCastingBeamSpellObj = playerObject.GetComponent<PlayerMovement>().isCastingBeamSpell;
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
         isCastingBeamSpellObj = playerObject.GetComponent<PlayerMovement>().isCastingBeamSpell;
-        Debug.Log(isCastingBeamSpellObj);
         if(isCastingBeamSpellObj)
         {
             localScaleOfTheBeam.z = 10;

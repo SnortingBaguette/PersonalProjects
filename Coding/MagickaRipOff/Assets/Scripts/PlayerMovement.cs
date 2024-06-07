@@ -17,7 +17,6 @@ public class PlayerMovement : MonoBehaviour
     public float rotationSpeed = 12f;
 
     public Transform feetObject;        //Attach an Empty object that will represent player's feet
-    private Vector3 feetPos;
 
     public Transform movementTarget;   //Reference the position to where the player needs to move
     private Vector3 movementTargetPos;
@@ -28,20 +27,87 @@ public class PlayerMovement : MonoBehaviour
 
     int amountOfActiveElements;
 
+    bool isCoroutineStarted;
+
+    private IEnumerator LimitBeamSpellTime()
+    {
+        Debug.Log(isCoroutineStarted);
+        yield return new WaitForSeconds(5f);
+        EndBeamCasting();
+        Debug.Log(isCoroutineStarted);
+        yield break;
+    }
+
+    IEnumerator StopBeamTimer;
+
+    //Trying to implement a State Machine
+    public enum State
+    {
+        Walking,
+        CastingBeam
+    }
+    private State currentState;
+    //State Machine Implementation
 
     // Start is called before the first frame update
     void Start()
     {
+        StopBeamTimer = LimitBeamSpellTime();
         characterController = GetComponent<CharacterController>();
-        
+        currentState = State.Walking;
     }
 
     // Update is called once per frame
     void Update()
     {
-        CheckPlayerCastingState();
-        UpdatePlayerRotation();
-        UpdatePlayerMovement();
+        
+        //State Machine Implementation
+        switch (currentState)                                   //Call necessary functions depending on what state is in
+        {
+            case State.Walking:
+                UpdatePlayerMovementWalking();
+                UpdatePlayerRotation();
+                break;
+            case State.CastingBeam:
+                UpdatePlayerMovementCastingBeam();
+                UpdatePlayerRotation();
+                break;
+        }
+
+        switch (currentState)
+        {
+
+            case State.Walking:
+                if (isCoroutineStarted)
+                {
+                    StopAllCoroutines();                                                    //Stop a coroutine that limits the spell time
+                    isCoroutineStarted = false;
+                }
+
+                if (Input.GetKeyDown(KeyCode.Mouse1) && amountOfActiveElements > 0)         //Condition to change the state
+                {
+                    currentState = State.CastingBeam;
+                }
+                break;
+
+            case State.CastingBeam:
+                if (!isCoroutineStarted)                                                    
+                {
+                    StartCoroutine(LimitBeamSpellTime());                                   //Start a coroutine that limits the spell time
+                    isCoroutineStarted = true;
+                }
+
+                if (Input.GetKeyUp(KeyCode.Mouse1))                                         //Condition to change the state
+                {
+                    StopAllCoroutines();                                                    //Stop a coroutine that limits the spell time
+                    EndBeamCasting();
+                }
+                break;
+        }
+        //State Machine Implementation
+        //CheckPlayerCastingState();
+        //UpdatePlayerRotation();
+        //UpdatePlayerMovementCastingBeam();
     }
 
 
@@ -53,40 +119,30 @@ public class PlayerMovement : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, rotation, rotationSpeed * Time.deltaTime);     //Interpolate between the starting player rotation and mouse cursor direction
     }
 
-    private void UpdatePlayerMovement()
+   
+
+
+
+    private void UpdatePlayerMovementWalking()
     {
-        
+        isCastingBeamSpell = false;
         movementTargetPos = movementTarget.transform.position;          //Create a variable to store the target's position
         moveDirection = movementTargetPos - transform.position;         //Get the direction from the player to the target
         moveDirection.y = 0;
-        feetPos = feetObject.position;                                  //Create a variable to store player feet position
 
         moveDirection = Vector3.Normalize(moveDirection);               //Normalize the vector from player to the target
 
-        if (Vector3.Distance(feetPos, movementTargetPos) >= .081f)       //Distance check to avoid the player jittering over the target
+        if (Vector3.Distance(feetObject.position, movementTargetPos) >= .081f)       //Distance check to avoid the player jittering over the target
         {
             characterController.Move(moveDirection * characterSpeed * Time.deltaTime);                      //Character moving when not in close range of the target
-            isActivelyMoving = true;
-        }
-        else
-        {
-            isActivelyMoving = false;
         }
 
-
-        if (Input.GetKeyDown(KeyCode.Mouse0))                           //This check will make sure that the character will pause movement when casting a beam spell
-        {
-            isStoppableByCastingABeamSpell = false;
-        }
 
         if (Input.GetKeyDown(KeyCode.S) && amountOfActiveElements < 5)                           //This check will make sure that the character will pause movement when casting a beam spell
         {
             amountOfActiveElements++;
             switch (amountOfActiveElements)
             {
-                case 0:
-                    characterSpeed = 4.25f;
-                    break;
                 case 1:
                     characterSpeed = 4;
                     break;
@@ -105,58 +161,57 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
- 
-
         
     }
 
-    private void CheckPlayerCastingState()
+    private void UpdatePlayerMovementCastingBeam()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse1))
+
+        if (Input.GetKey(KeyCode.Mouse1))
         {
+            isCastingBeamSpell = true;
             switch (amountOfActiveElements)
             {
-                case 0:
-                    characterSpeed = 4.25f;
-                    break;
                 case 1:
-                    characterSpeed = 4;
-                    rotationSpeed = 1f;
-                    isCastingBeamSpell = true;
-                    break;
-                case 2:
                     characterSpeed = 3.5f;
                     rotationSpeed = 1f;
-                    isCastingBeamSpell = true;
                     break;
-                case 3:
+                case 2:
                     characterSpeed = 3f;
                     rotationSpeed = 1f;
-                    isCastingBeamSpell = true;
+                    break;
+                case 3:
+                    characterSpeed = 2.75f;
+                    rotationSpeed = 1f;
                     break;
                 case 4:
-                    characterSpeed = 2.5f;
+                    characterSpeed = 2.3f;
                     rotationSpeed = 1f;
-                    isCastingBeamSpell = true;
                     break;
                 case 5:
                     characterSpeed = 2f;
                     rotationSpeed = 1f;
-                    isCastingBeamSpell = true;
                     break;
             }
         }
 
+        movementTargetPos = movementTarget.transform.position;          //Create a variable to store the target's position
+        moveDirection = movementTargetPos - transform.position;         //Get the direction from the player to the target
+        moveDirection.y = 0;
 
+        moveDirection = Vector3.Normalize(moveDirection);               //Normalize the vector from player to the target
 
-
-        if (Input.GetKeyUp(KeyCode.Mouse1))
+        if (Vector3.Distance(feetObject.position, movementTargetPos) >= .081f)       //Distance check to avoid the player jittering over the target
         {
-            isCastingBeamSpell = false;
-            characterSpeed = 4.25f;
-            rotationSpeed = 12f;
-            amountOfActiveElements = 0;
+            characterController.Move(moveDirection * characterSpeed * Time.deltaTime);                      //Character moving when not in close range of the target
         }
-        
+    }
+
+    private void EndBeamCasting()
+    {
+        currentState = State.Walking;
+        characterSpeed = 4.25f;
+        rotationSpeed = 12f;
+        amountOfActiveElements = 0;
     }
 }
