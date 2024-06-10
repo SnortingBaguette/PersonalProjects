@@ -22,20 +22,33 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 movementTargetPos;
 
     public bool isCastingBeamSpell;
-    private bool isStoppableByCastingABeamSpell;
-    private bool isActivelyMoving;
 
     int amountOfActiveElements;
 
     bool isCoroutineStarted;
 
+    public Vector3 elementParticleNewInstancePos = new Vector3(0,0,1);
+    public GameObject elementParticlePrefab;
+
     private IEnumerator LimitBeamSpellTime()
     {
-        Debug.Log(isCoroutineStarted);
-        yield return new WaitForSeconds(5f);
-        EndBeamCasting();
-        Debug.Log(isCoroutineStarted);
-        yield break;
+
+        switch (amountOfActiveElements)
+        {
+            case 1:
+                yield return new WaitForSeconds(6f);
+                EndBeamCasting();
+                yield break;
+            case 2:
+                yield return new WaitForSeconds(7f);
+                EndBeamCasting();
+                yield break;
+            case 3:
+                yield return new WaitForSeconds(8f);
+                EndBeamCasting();
+                yield break;
+        }
+        
     }
 
     IEnumerator StopBeamTimer;
@@ -119,7 +132,7 @@ public class PlayerMovement : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, rotation, rotationSpeed * Time.deltaTime);     //Interpolate between the starting player rotation and mouse cursor direction
     }
 
-   
+
 
 
 
@@ -136,10 +149,14 @@ public class PlayerMovement : MonoBehaviour
         {
             characterController.Move(moveDirection * characterSpeed * Time.deltaTime);                      //Character moving when not in close range of the target
         }
-
-
-        if (Input.GetKeyDown(KeyCode.S) && amountOfActiveElements < 5)                           //This check will make sure that the character will pause movement when casting a beam spell
+        if (Input.GetKeyDown(KeyCode.S) && amountOfActiveElements < 3)                           //This check will make sure that the character will pause movement when casting a beam spell
         {
+            AddCastingElements();
+        }
+    }
+
+    private void AddCastingElements()
+    {
             amountOfActiveElements++;
             switch (amountOfActiveElements)
             {
@@ -147,21 +164,12 @@ public class PlayerMovement : MonoBehaviour
                     characterSpeed = 4;
                     break;
                 case 2:
-                    characterSpeed = 3.75f;
-                    break;
-                case 3:
                     characterSpeed = 3.5f;
                     break;
-                case 4:
-                    characterSpeed = 3.25f;
-                    break;
-                case 5:
+                case 3:
                     characterSpeed = 3f;
                     break;
             }
-        }
-
-        
     }
 
     private void UpdatePlayerMovementCastingBeam()
@@ -174,23 +182,23 @@ public class PlayerMovement : MonoBehaviour
             {
                 case 1:
                     characterSpeed = 3.5f;
-                    rotationSpeed = 1f;
+                    rotationSpeed = .7f;
                     break;
                 case 2:
                     characterSpeed = 3f;
-                    rotationSpeed = 1f;
+                    rotationSpeed = .7f;
                     break;
                 case 3:
                     characterSpeed = 2.75f;
-                    rotationSpeed = 1f;
+                    rotationSpeed = .7f;
                     break;
                 case 4:
                     characterSpeed = 2.3f;
-                    rotationSpeed = 1f;
+                    rotationSpeed = .7f;
                     break;
                 case 5:
                     characterSpeed = 2f;
-                    rotationSpeed = 1f;
+                    rotationSpeed = .7f;
                     break;
             }
         }
