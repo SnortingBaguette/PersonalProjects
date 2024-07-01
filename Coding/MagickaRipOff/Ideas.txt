@@ -1,0 +1,1 @@
+Implement the maigckas by having a list that fills up with elemets, and then use a switch statement on spacebar to check if it lines up with any implemented magickas. Use that or left click to clear the list after casting.
