@@ -27,8 +27,9 @@ public class PlayerMovement : MonoBehaviour
 
     bool isCoroutineStarted;
 
-    public Vector3 elementParticleNewInstancePos = new Vector3(0,0,1);
-    public GameObject elementParticlePrefab;
+
+    public GameObject elementPrefab;
+    private float prefabRotationOffset;
 
     private IEnumerator LimitBeamSpellTime()
     {
@@ -162,12 +163,15 @@ public class PlayerMovement : MonoBehaviour
             {
                 case 1:
                     characterSpeed = 4;
+                Instantiate(elementPrefab);
                     break;
                 case 2:
                     characterSpeed = 3.5f;
+                    Instantiate(elementPrefab);
                     break;
                 case 3:
                     characterSpeed = 3f;
+                    Instantiate(elementPrefab);
                     break;
             }
     }
