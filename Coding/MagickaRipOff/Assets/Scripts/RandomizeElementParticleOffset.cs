@@ -9,6 +9,7 @@ public class RandomizeElementParticleOffset : MonoBehaviour
     private float offsetLimitVertical = .5f;
     private float offsetLimitHorizontalOuter = 1.25f;
     private float offsetLimitHorizontalInner = .75f;
+    private ParticleSystem pS;
 
     private void Start()
     {
@@ -16,6 +17,9 @@ public class RandomizeElementParticleOffset : MonoBehaviour
         particleOffset.z = Random.Range(-.05f, .05f);
         transform.Translate(Vector3.right * Random.Range(-.025f, 0.25f) * Time.deltaTime);
         transform.Translate(Vector3.up * Random.Range(-.05f, 0.5f) * Time.deltaTime);
+        pS = GetComponent<ParticleSystem>();
+        var main = pS.main;
+        main.startColor = Color.cyan;
     }
 
     private void Update()

@@ -27,9 +27,11 @@ public class PlayerMovement : MonoBehaviour
 
     bool isCoroutineStarted;
 
+    public char[] castedElementsRef = new char[3];
+    public bool cancelTheElement;
+
 
     public GameObject elementPrefab;
-    private float prefabRotationOffset;
 
     private IEnumerator LimitBeamSpellTime()
     {
@@ -152,7 +154,44 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.S) && amountOfActiveElements < 3)                           //This check will make sure that the character will pause movement when casting a beam spell
         {
-            AddCastingElements();
+            foreach (char element in castedElementsRef)
+            {
+                if (element != 'w')
+                {
+                    cancelTheElement = false;
+                }
+                else if (element == 'w')
+                {
+                    cancelTheElement = true;
+                    break;
+                }
+            }
+            if (!cancelTheElement)
+            {
+                AddCastingElements();
+            }
+            
+        }
+
+        if (Input.GetKeyDown(KeyCode.W) && amountOfActiveElements < 3)                           //This check will make sure that the character will pause movement when casting a beam spell
+        {
+            foreach (char element in castedElementsRef)
+            {
+                if (element != 's')
+                {
+                    cancelTheElement = false;
+                }
+                else if (element == 's')
+                {
+                    cancelTheElement = true;
+                    break;
+                }
+            }
+            if (!cancelTheElement)
+            {
+                AddCastingElements();
+            }
+
         }
     }
 
