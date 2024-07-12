@@ -24,7 +24,7 @@ public class BeamSizeAdjustment : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        isCastingBeamSpellObj = playerObject.GetComponent<PlayerMovement>().isCastingBeamSpell;
+        /*isCastingBeamSpellObj = playerObject.GetComponent<PlayerMovement>().isCastingBeamSpell;
         if(isCastingBeamSpellObj)
         {
             localScaleOfTheBeam.z = 10;
@@ -35,6 +35,6 @@ public class BeamSizeAdjustment : MonoBehaviour
             localScaleOfTheBeam.z = 1;
             transform.localScale = localScaleOfTheBeam;
         }
-
+        */
     }
 }

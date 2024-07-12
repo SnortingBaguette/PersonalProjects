@@ -23,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
 
     public bool isCastingBeamSpell;
 
-    int amountOfActiveElements;
+    public int amountOfActiveElements;
 
     bool isCoroutineStarted;
 

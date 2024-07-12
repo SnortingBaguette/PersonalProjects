@@ -19,7 +19,7 @@ public class RandomizeElementParticleOffset : MonoBehaviour
         transform.Translate(Vector3.up * Random.Range(-.05f, 0.5f) * Time.deltaTime);
         pS = GetComponent<ParticleSystem>();
         var main = pS.main;
-        main.startColor = Color.cyan;
+        //main.startColor = Color.cyan;
     }
 
     private void Update()
