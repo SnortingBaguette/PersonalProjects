@@ -10,7 +10,7 @@ public class BeamRayCast : MonoBehaviour
     private PlayerMovement castingSpell;
     public Vector3 raycastOffset = new Vector3(0, 0.5f, 0);
     public LineRenderer lineRenderer;
-    private PlayerMovement elementsAmount;
+    private AddCastingElements elementsAmount;
     
 
 
@@ -18,7 +18,7 @@ public class BeamRayCast : MonoBehaviour
     void Start()
     {
         castingSpell = GetComponent<PlayerMovement>();
-        elementsAmount = GetComponent<PlayerMovement>();
+        elementsAmount = GetComponent<AddCastingElements>();
         lineRenderer.enabled = false;
 
     }
@@ -33,7 +33,7 @@ public class BeamRayCast : MonoBehaviour
         {
             RaycastBeamSpell(); 
         }
-        if (!castingSpell.isCastingBeamSpell)
+        else
         {
             lineRenderer.enabled = false;
 
@@ -61,13 +61,13 @@ public class BeamRayCast : MonoBehaviour
                 switch (elementsAmount.amountOfActiveElements)
                 {
                     case 1:
-                        enemy.TakeDamage(10);
+                        enemy.TakeDamageArcane(10);
                         break;
                     case 2:
-                        enemy.TakeDamage(15);
+                        enemy.TakeDamageArcane(15);
                         break;
                     case 3:
-                        enemy.TakeDamage(20);
+                        enemy.TakeDamageArcane(20);
                         break;
                 }
                 

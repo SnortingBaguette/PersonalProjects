@@ -7,6 +7,7 @@ public class SavedMousePos : MonoBehaviour
 
     private Transform savedMousePos;
     public GameObject cursorReferencedPosition;
+    public Transform playerFeet;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +21,11 @@ public class SavedMousePos : MonoBehaviour
         if (Input.GetKey(KeyCode.Mouse0))
         {
             transform.position = savedMousePos.position;
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftControl)) 
+        {
+            transform.position = playerFeet.position;
         }
     }
 }

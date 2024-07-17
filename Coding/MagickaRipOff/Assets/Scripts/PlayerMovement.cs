@@ -23,20 +23,16 @@ public class PlayerMovement : MonoBehaviour
 
     public bool isCastingBeamSpell;
 
-    public int amountOfActiveElements;
-
     bool isCoroutineStarted;
 
     public char[] castedElementsRef = new char[3];
-    public bool cancelTheElement;
 
-
-    public GameObject elementPrefab;
+    private AddCastingElements amountOfActiveElements;
 
     private IEnumerator LimitBeamSpellTime()
     {
 
-        switch (amountOfActiveElements)
+        switch (amountOfActiveElements.amountOfActiveElements)
         {
             case 1:
                 yield return new WaitForSeconds(6f);
@@ -54,9 +50,8 @@ public class PlayerMovement : MonoBehaviour
         
     }
 
-    IEnumerator StopBeamTimer;
 
-    //Trying to implement a State Machine
+
     public enum State
     {
         Walking,
@@ -68,9 +63,10 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StopBeamTimer = LimitBeamSpellTime();
         characterController = GetComponent<CharacterController>();
         currentState = State.Walking;
+        amountOfActiveElements = GetComponent<AddCastingElements>();
+        Debug.Log(amountOfActiveElements.amountOfActiveElements);
     }
 
     // Update is called once per frame
@@ -83,31 +79,21 @@ public class PlayerMovement : MonoBehaviour
             case State.Walking:
                 UpdatePlayerMovementWalking();
                 UpdatePlayerRotation();
-                break;
-            case State.CastingBeam:
-                UpdatePlayerMovementCastingBeam();
-                UpdatePlayerRotation();
-                break;
-        }
-
-        switch (currentState)
-        {
-
-            case State.Walking:
                 if (isCoroutineStarted)
                 {
                     StopAllCoroutines();                                                    //Stop a coroutine that limits the spell time
                     isCoroutineStarted = false;
                 }
 
-                if (Input.GetKeyDown(KeyCode.Mouse1) && amountOfActiveElements > 0)         //Condition to change the state
+                if (Input.GetKeyDown(KeyCode.Mouse1) && amountOfActiveElements.amountOfActiveElements > 0)         //Condition to change the state
                 {
                     currentState = State.CastingBeam;
                 }
                 break;
-
             case State.CastingBeam:
-                if (!isCoroutineStarted)                                                    
+                UpdatePlayerMovementCastingBeam();
+                UpdatePlayerRotation();
+                if (!isCoroutineStarted)
                 {
                     StartCoroutine(LimitBeamSpellTime());                                   //Start a coroutine that limits the spell time
                     isCoroutineStarted = true;
@@ -120,10 +106,8 @@ public class PlayerMovement : MonoBehaviour
                 }
                 break;
         }
-        //State Machine Implementation
-        //CheckPlayerCastingState();
-        //UpdatePlayerRotation();
-        //UpdatePlayerMovementCastingBeam();
+
+
     }
 
 
@@ -152,67 +136,6 @@ public class PlayerMovement : MonoBehaviour
         {
             characterController.Move(moveDirection * characterSpeed * Time.deltaTime);                      //Character moving when not in close range of the target
         }
-        if (Input.GetKeyDown(KeyCode.S) && amountOfActiveElements < 3)                           //This check will make sure that the character will pause movement when casting a beam spell
-        {
-            foreach (char element in castedElementsRef)
-            {
-                if (element != 'w')
-                {
-                    cancelTheElement = false;
-                }
-                else if (element == 'w')
-                {
-                    cancelTheElement = true;
-                    break;
-                }
-            }
-            if (!cancelTheElement)
-            {
-                AddCastingElements();
-            }
-            
-        }
-
-        if (Input.GetKeyDown(KeyCode.W) && amountOfActiveElements < 3)                           //This check will make sure that the character will pause movement when casting a beam spell
-        {
-            foreach (char element in castedElementsRef)
-            {
-                if (element != 's')
-                {
-                    cancelTheElement = false;
-                }
-                else if (element == 's')
-                {
-                    cancelTheElement = true;
-                    break;
-                }
-            }
-            if (!cancelTheElement)
-            {
-                AddCastingElements();
-            }
-
-        }
-    }
-
-    private void AddCastingElements()
-    {
-            amountOfActiveElements++;
-            switch (amountOfActiveElements)
-            {
-                case 1:
-                    characterSpeed = 4;
-                Instantiate(elementPrefab);
-                    break;
-                case 2:
-                    characterSpeed = 3.5f;
-                    Instantiate(elementPrefab);
-                    break;
-                case 3:
-                    characterSpeed = 3f;
-                    Instantiate(elementPrefab);
-                    break;
-            }
     }
 
     private void UpdatePlayerMovementCastingBeam()
@@ -221,7 +144,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.Mouse1))
         {
             isCastingBeamSpell = true;
-            switch (amountOfActiveElements)
+            switch (amountOfActiveElements.amountOfActiveElements)
             {
                 case 1:
                     characterSpeed = 3.5f;
@@ -263,6 +186,7 @@ public class PlayerMovement : MonoBehaviour
         currentState = State.Walking;
         characterSpeed = 4.25f;
         rotationSpeed = 12f;
-        amountOfActiveElements = 0;
+        amountOfActiveElements.amountOfActiveElements = 0;
+        amountOfActiveElements.ResetTheElementFlags();
     }
 }

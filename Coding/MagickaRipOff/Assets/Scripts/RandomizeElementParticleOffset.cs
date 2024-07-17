@@ -10,6 +10,8 @@ public class RandomizeElementParticleOffset : MonoBehaviour
     private float offsetLimitHorizontalOuter = 1.25f;
     private float offsetLimitHorizontalInner = .75f;
     private ParticleSystem pS;
+    private GameObject playerObject;
+    private AddCastingElements latestElement;
 
     private void Start()
     {
@@ -17,8 +19,42 @@ public class RandomizeElementParticleOffset : MonoBehaviour
         particleOffset.z = Random.Range(-.05f, .05f);
         transform.Translate(Vector3.right * Random.Range(-.025f, 0.25f) * Time.deltaTime);
         transform.Translate(Vector3.up * Random.Range(-.05f, 0.5f) * Time.deltaTime);
+
+        playerObject = GameObject.Find("Player");
+        latestElement = playerObject.GetComponent<AddCastingElements>();
         pS = GetComponent<ParticleSystem>();
         var main = pS.main;
+        switch (latestElement.latestElement)
+        {
+            case 'q':
+                main.startColor = Color.blue;
+                break;
+            case 'w':
+                main.startColor = Color.green;
+                break;
+            case 'e':
+                main.startColor = Color.yellow;
+                break;
+            case 'r':
+                main.startColor = Color.cyan;
+                break;
+            case 'a':
+                main.startColor = Color.magenta;
+                break;
+            case 's':
+                main.startColor = Color.red;
+                break;
+            case 'd':
+                main.startColor = new Color(0.647f, 0.165f, 0.165f);
+                break;
+            case 'f':
+                main.startColor = new Color(1f, 0.5f, 0.2f);
+                break;
+
+
+        }
+        
+        
         //main.startColor = Color.cyan;
     }
 
