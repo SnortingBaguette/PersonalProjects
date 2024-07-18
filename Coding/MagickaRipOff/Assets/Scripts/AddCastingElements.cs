@@ -24,6 +24,7 @@ public class AddCastingElements : MonoBehaviour
     private bool hasFrost = false;
     public int frostPower = 0;
     public char latestElement;
+    public string elementQue;
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +40,7 @@ public class AddCastingElements : MonoBehaviour
             hasWater = true;
             waterPower++;
             latestElement = 'q';
+            elementQue += "q";
             AddCastingElement();
         }
 
@@ -47,6 +49,7 @@ public class AddCastingElements : MonoBehaviour
             hasHeal = true;
             healPower++;
             latestElement = 'w';
+            elementQue += "w";
             AddCastingElement();
         }
 
@@ -54,6 +57,7 @@ public class AddCastingElements : MonoBehaviour
         {
             hasShield = true;
             latestElement = 'e';
+            elementQue += "e";
             AddCastingElement();
         }
 
@@ -62,6 +66,7 @@ public class AddCastingElements : MonoBehaviour
             hasFrost = true;
             frostPower++;
             latestElement = 'r';
+            elementQue += "r";
             AddCastingElement();
         }
 
@@ -70,6 +75,7 @@ public class AddCastingElements : MonoBehaviour
             hasElectricity = true;
             electricityPower++;
             latestElement = 'a';
+            elementQue += "a";
             AddCastingElement();
         }
 
@@ -78,6 +84,7 @@ public class AddCastingElements : MonoBehaviour
             hasArcane = true;
             arcanePower++;
             latestElement = 's';
+            elementQue += "s";
             AddCastingElement();
         }
 
@@ -86,6 +93,7 @@ public class AddCastingElements : MonoBehaviour
             hasRock = true;
             rockPower++;
             latestElement = 'd';
+            elementQue += "d";
             AddCastingElement();
         }
 
@@ -94,6 +102,7 @@ public class AddCastingElements : MonoBehaviour
             hasFire = true;
             firePower++;
             latestElement = 'f';
+            elementQue += "f";
             AddCastingElement();
         }
     }
@@ -137,5 +146,6 @@ public class AddCastingElements : MonoBehaviour
         rockPower = 0;
         waterPower = 0;
         frostPower = 0;
+        elementQue = null;
     }
 }
