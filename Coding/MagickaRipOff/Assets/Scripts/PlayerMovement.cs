@@ -25,8 +25,6 @@ public class PlayerMovement : MonoBehaviour
 
     bool isCoroutineStarted;
 
-    public char[] castedElementsRef = new char[3];
-
     private AddCastingElements amountOfActiveElements;
 
     private IEnumerator LimitBeamSpellTime()
@@ -36,15 +34,15 @@ public class PlayerMovement : MonoBehaviour
         {
             case 1:
                 yield return new WaitForSeconds(6f);
-                EndBeamCasting();
+                EndSpellCasting();
                 yield break;
             case 2:
                 yield return new WaitForSeconds(7f);
-                EndBeamCasting();
+                EndSpellCasting();
                 yield break;
             case 3:
                 yield return new WaitForSeconds(8f);
-                EndBeamCasting();
+                EndSpellCasting();
                 yield break;
         }
         
@@ -55,7 +53,8 @@ public class PlayerMovement : MonoBehaviour
     public enum State
     {
         Walking,
-        CastingBeam
+        CastingBeam,
+        CastingRockProjectile
     }
     private State currentState;
     //State Machine Implementation
@@ -102,7 +101,7 @@ public class PlayerMovement : MonoBehaviour
                 if (Input.GetKeyUp(KeyCode.Mouse1))                                         //Condition to change the state
                 {
                     StopAllCoroutines();                                                    //Stop a coroutine that limits the spell time
-                    EndBeamCasting();
+                    EndSpellCasting();
                 }
                 break;
         }
@@ -181,7 +180,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void EndBeamCasting()
+    private void EndSpellCasting()
     {
         currentState = State.Walking;
         characterSpeed = 4.25f;
