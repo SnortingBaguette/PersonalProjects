@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
     private AddCastingElements amountOfActiveElements;
 
-    public GameObject electricityCollisionArea;
+
 
     private IEnumerator LimitBeamSpellTime()
     {
@@ -240,16 +240,16 @@ public class PlayerMovement : MonoBehaviour
             switch (amountOfActiveElements.amountOfActiveElements)
             {
                 case 1:
-                    characterSpeed = 3.5f;
-                    rotationSpeed = .7f;
+                    characterSpeed = 3.75f;
+                    rotationSpeed = 8f;
                     break;
                 case 2:
-                    characterSpeed = 3f;
-                    rotationSpeed = .7f;
+                    characterSpeed = 3.5f;
+                    rotationSpeed = 8f;
                     break;
                 case 3:
-                    characterSpeed = 2.75f;
-                    rotationSpeed = .7f;
+                    characterSpeed = 3f;
+                    rotationSpeed = 8f;
                     break;
                 case 4:
                     characterSpeed = 2.3f;

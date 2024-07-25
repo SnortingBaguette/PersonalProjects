@@ -6,7 +6,9 @@ public class ElectricitySpellCast : MonoBehaviour
 {
 
     private PlayerMovement electricitySpellStatus;
-    public GameObject electricitySpellArea;
+    public GameObject electricitySpellAreaSmall;
+    public GameObject electricitySpellAreaMedium;
+    public GameObject electricitySpellAreaLarge;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,11 +20,11 @@ public class ElectricitySpellCast : MonoBehaviour
     {
         if (electricitySpellStatus.isCastingElectricitySpell)
         {
-            electricitySpellArea.SetActive(true);
+            electricitySpellAreaSmall.SetActive(true);
         }
         else
         {
-            electricitySpellArea.SetActive(false);
+            electricitySpellAreaSmall.SetActive(false);
         }
     }
 }
